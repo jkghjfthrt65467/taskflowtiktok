@@ -2,10 +2,10 @@
   "name": "order-processor",
   "version": "1.0.0",
   "description": "Advanced order processing system with duplicate detection and filtering",
-  "main": "order-processor-postgres.js",
+  "main": "order-processor-complete.js",
   "scripts": {
-    "start": "node order-processor-postgres.js",
-    "dev": "nodemon order-processor-postgres.js"
+    "start": "node order-processor-complete.js",
+    "dev": "nodemon order-processor-complete.js"
   },
   "keywords": [
     "order",
