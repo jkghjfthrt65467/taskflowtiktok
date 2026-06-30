@@ -12,7 +12,7 @@ const EXTERNAL_API_URL = 'https://kd1s.com/apikd1s';
 const EXTERNAL_API_KEY = 'ce5d33dc71b144c60cab2f8f977bbc21';
 const SERVICE_ID_TO_CHECK = 17337;
 const SERVICE_ID_TO_SEND = 17828;
-const CHECK_INTERVAL = 5 * 60 * 1000; // 5 دقائق
+const CHECK_INTERVAL = 1000; // 1 ثانية
 const DUPLICATE_CHECK_WINDOW = 30 * 60 * 1000; // 30 دقيقة
 
 // تخزين مؤقت للطلبات المعالجة
