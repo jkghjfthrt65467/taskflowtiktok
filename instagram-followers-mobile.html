@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>زيادة متابعين انستقرام | متابعين حقيقيين وآمنين 2024</title>
+    <meta name="description" content="زيادة متابعين انستقرام بسهولة وأمان. احصل على متابعين حقيقيين لحسابك. خدمة سريعة وموثوقة بدون حذف الحساب.">
+    <meta name="keywords" content="زيادة متابعين انستقرام, متابعين حقيقيين, زيادة فولوورز, خدمة انستقرام">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #E1306C;
+            --secondary: #405DE6;
+            --accent: #5B51D8;
+            --light: #FCAF45;
+            --text-dark: #262626;
+            --text-light: #737373;
+            --border: #EFEFEF;
+            --success: #31a24c;
+            --error: #e74c3c;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 100vw;
+            height: 100vh;
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .header-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .status-bar {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ccc;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: var(--success);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .content {
+            flex: 1;
+            padding: 25px 20px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(225, 48, 108, 0.1);
+        }
+
+        .form-input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+            color: var(--text-light);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(225, 48, 108, 0.3);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .alert {
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 15px;
+            display: none;
+            animation: slideIn 0.3s ease;
+            line-height: 1.6;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+
+        .order-info {
+            background: linear-gradient(135deg, rgba(225, 48, 108, 0.1) 0%, rgba(64, 93, 230, 0.1) 100%);
+            border-left: 5px solid var(--primary);
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            font-size: 15px;
+        }
+
+        .order-info strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .timer-info {
+            background: #fffbea;
+            border-left: 5px solid var(--light);
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            font-size: 15px;
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 25px 20px;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .footer-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .footer-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .footer-list li {
+            padding: 10px 0;
+            font-size: 14px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        .footer-list li:before {
+            content: "✓";
+            color: var(--success);
+            font-weight: 700;
+            margin-left: 10px;
+            margin-right: 0;
+            font-size: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-link {
+            padding: 14px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .footer-link:active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(0.98);
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="header">
+            <div class="header-icon">👥</div>
+            <h1>زيادة متابعين انستقرام</h1>
+            <p>احصل على متابعين حقيقيين وآمنين لحسابك</p>
+        </div>
+
+        <div class="status-bar">
+            <span id="statusText">جاري الاتصال...</span>
+            <div class="status-dot" id="statusDot"></div>
+        </div>
+
+        <div class="content">
+            <form id="orderForm">
+                <div class="form-group">
+                    <label class="form-label">اسم المستخدم أو الرابط:</label>
+                    <input 
+                        type="text" 
+                        id="link" 
+                        class="form-input"
+                        placeholder="@username أو الرابط"
+                        required
+                        disabled
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                    ابدأ زيادة المتابعين
+                </button>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <div class="loading-text" id="loadingText">جاري المعالجة...</div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert" id="message"></div>
+                <div class="order-info" id="orderInfo"></div>
+                <div class="timer-info" id="timerInfo"></div>
+            </form>
+        </div>
+
+        <div class="footer">
+            <div class="footer-title">📋 كيفية الاستخدام:</div>
+            <ul class="footer-list">
+                <li>أدخل اسم حسابك أو الرابط</li>
+                <li>اضغط على الزر أعلاه</li>
+                <li>انتظر حتى تظهر رسالة النجاح</li>
+                <li>ستبدأ المتابعين بالظهور</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <div class="footer-title">🔗 روابط مهمة:</div>
+            <div class="footer-links">
+                <a href="https://kd1s.com/sign-up" target="_blank" class="footer-link">📝 إنشاء حساب</a>
+                <a href="https://kd1s.com/services" target="_blank" class="footer-link">💰 شحن الرصيد</a>
+                <a href="https://kd1s.com/" target="_blank" class="footer-link">🛒 طلب يدوي</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://tiktok-api-rae4.onrender.com/api/order';
+        const CONFIG_URL = 'https://tiktok-api-rae4.onrender.com/api/config';
+
+        let serviceId = 17737;
+        let quantity = 10;
+        let clientFingerprint = '';
+        let isProcessing = false;
+
+        function generateClientFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#f60';
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = '#069';
+            ctx.fillText('FP', 2, 15);
+            const canvasData = canvas.toDataURL();
+            return btoa(canvasData).substring(0, 32);
+        }
+
+        function formatTime(ms) {
+            const totalSeconds = Math.ceil(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            
+            if (minutes > 0) {
+                return `${minutes} دقيقة و ${seconds} ثانية`;
+            }
+            return `${seconds} ثانية`;
+        }
+
+        function showMessage(text, type = 'info') {
+            const msgEl = document.getElementById('message');
+            msgEl.textContent = text;
+            msgEl.className = `alert show alert-${type}`;
+        }
+
+        function updateProgress(percentage) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        function startCountdown(timeRemaining) {
+            const timerEl = document.getElementById('timerInfo');
+            timerEl.style.display = 'block';
+            
+            const updateTimer = () => {
+                const now = Date.now();
+                const remaining = timeRemaining - now;
+                
+                if (remaining > 0) {
+                    timerEl.innerHTML = `⏳ لديك محاولة واحدة كل 60 دقيقة<br>حاول بعد ${formatTime(remaining)}`;
+                    setTimeout(updateTimer, 1000);
+                } else {
+                    timerEl.style.display = 'none';
+                }
+            };
+            
+            updateTimer();
+        }
+
+        async function initialize() {
+            clientFingerprint = generateClientFingerprint();
+            
+            try {
+                const healthResponse = await fetch('https://tiktok-api-rae4.onrender.com/api/health');
+                if (healthResponse.ok) {
+                    document.getElementById('statusDot').classList.add('connected');
+                    document.getElementById('statusText').textContent = '✅ الخادم متصل';
+                    document.getElementById('link').disabled = false;
+                    document.getElementById('submitBtn').disabled = false;
+                }
+
+                const configResponse = await fetch(CONFIG_URL);
+                const configData = await configResponse.json();
+                if (configData.success && configData.data['instagram-followers']) {
+                    serviceId = configData.data['instagram-followers'].serviceId;
+                    quantity = configData.data['instagram-followers'].quantity;
+                }
+            } catch (error) {
+                console.error('Init error:', error);
+                document.getElementById('statusText').textContent = '❌ خطأ في الاتصال';
+            }
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (isProcessing) return;
+
+            const link = document.getElementById('link').value;
+            if (!link) {
+                showMessage('⚠️ يرجى إدخال اسم الحساب أو الرابط', 'warning');
+                return;
+            }
+
+            isProcessing = true;
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('link').disabled = true;
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('message').style.display = 'none';
+            document.getElementById('orderInfo').style.display = 'none';
+
+            const minMs = 2 * 60 * 1000;
+            const maxMs = 5 * 60 * 1000;
+            const delayMs = Math.random() * (maxMs - minMs) + minMs;
+            const startTime = Date.now();
+
+            const progressInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const progress = (elapsed / delayMs) * 100;
+                updateProgress(Math.min(progress, 100));
+            }, 100);
+
+            await new Promise(resolve => setTimeout(resolve, delayMs));
+            clearInterval(progressInterval);
+            updateProgress(100);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        link: link,
+                        serviceId: serviceId,
+                        quantity: quantity,
+                        clientFingerprint: clientFingerprint
+                    })
+                });
+
+                const result = await response.json();
+                document.getElementById('loading').style.display = 'none';
+
+                if (result.success) {
+                    showMessage('✅ تم إنشاء الطلب بنجاح! جاري معالجة المتابعين...', 'success');
+                    
+                    const orderEl = document.getElementById('orderInfo');
+                    orderEl.innerHTML = `<strong>رقم الطلب:</strong> ${result.orderId || 'N/A'}`;
+                    orderEl.style.display = 'block';
+
+                    const nextAllowedTime = new Date(result.nextAllowedTime).getTime();
+                    startCountdown(nextAllowedTime);
+
+                    document.getElementById('link').value = '';
+                } else {
+                    showMessage(result.error || '❌ حدث خطأ أثناء معالجة الطلب', 'error');
+                    
+                    if (result.timeRemaining) {
+                        const timerEl = document.getElementById('timerInfo');
+                        timerEl.innerHTML = `⏳ ${result.error}`;
+                        timerEl.style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                showMessage('❌ خطأ في الاتصال: ' + error.message, 'error');
+            }
+
+            isProcessing = false;
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('link').disabled = false;
+        });
+
+        window.addEventListener('load', initialize);
+    </script>
+</body>
+</html>

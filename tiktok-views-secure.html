@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="description" content="أداة زيادة مشاهدات تيك توك مجانية - احصل على مشاهدات حقيقية لفيديوهاتك.">
+    <meta name="keywords" content="زيادة مشاهدات تيك توك, مشاهدات تيك توك مجانية, رشق مشاهدات تيك توك">
+    <title>زيادة مشاهدات تيك توك مجاني | kd1s.com</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a0f1c, #03060c);
+            font-family: 'Segoe UI', 'Tahoma', 'Cairo', system-ui, sans-serif;
+            padding: 1rem;
+            color: #eef2ff;
+            line-height: 1.5;
+        }
+        .container { max-width: 580px; margin: 0 auto; }
+        .card {
+            background: rgba(15, 22, 36, 0.7);
+            backdrop-filter: blur(16px);
+            border-radius: 48px;
+            padding: 1.6rem 1.2rem;
+            margin-bottom: 1.8rem;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+        }
+        .logo {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff0050, #ff6b6b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .tagline {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #ff0050;
+            margin-top: 5px;
+            margin-bottom: 1.5rem;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 1.2rem;
+        }
+        .url-input {
+            background: #0f1422;
+            border: 1px solid #2e3a55;
+            border-radius: 60px;
+            padding: 14px 20px;
+            color: white;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            outline: none;
+            width: 100%;
+        }
+        .url-input:focus { border-color: #ff0050; box-shadow: 0 0 6px rgba(255, 0, 80, 0.5); }
+        .url-input:disabled { opacity: 0.6; cursor: not-allowed; }
+        .glow-btn {
+            background: linear-gradient(105deg, #ff0050, #ff6b6b);
+            border: none;
+            border-radius: 60px;
+            padding: 14px 20px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 18px -4px black;
+            transition: all 0.3s ease;
+        }
+        .glow-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: linear-gradient(105deg, #999, #777);
+        }
+        .glow-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,250,210,0.7), transparent);
+            transform: skewX(-25deg);
+            animation: shineMove 3s infinite ease;
+            pointer-events: none;
+        }
+        @keyframes shineMove {
+            0% { left: -120%; }
+            30% { left: 20%; }
+            100% { left: 120%; }
+        }
+        .glow-btn:active:not(:disabled) { transform: scale(0.97); }
+        
+        .progress-section {
+            margin-top: 1.5rem;
+            display: none;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+            color: #ff0050;
+        }
+        .progress-bar-bg {
+            background: #1f2a3c;
+            border-radius: 40px;
+            height: 12px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #ff0050, #ff6b6b);
+            width: 0%;
+            height: 100%;
+            border-radius: 40px;
+            transition: width 0.2s linear;
+        }
+        .percentage-value {
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 0, 80, 0.3);
+            border-top: 3px solid #ff0050;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .status-message {
+            margin-top: 1rem;
+            padding: 12px 16px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: none;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .status-message.success {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.4);
+            display: flex;
+        }
+        
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            display: flex;
+        }
+        
+        .status-message.warning {
+            background: rgba(255, 0, 80, 0.2);
+            color: #ff0050;
+            border: 1px solid rgba(255, 0, 80, 0.4);
+            display: flex;
+        }
+        
+        .status-message.processing {
+            background: rgba(100, 200, 255, 0.2);
+            color: #64c8ff;
+            border: 1px solid rgba(100, 200, 255, 0.4);
+            display: flex;
+        }
+        
+        .rich-content {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 32px;
+            padding: 1.4rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-right: 4px solid #ff0050;
+            padding-right: 12px;
+            margin-bottom: 1rem;
+            color: #ff0050;
+        }
+        .step {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .step-num {
+            background: #ff0050;
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .keyword-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+        .keyword {
+            background: #2a3649;
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            color: #ff0050;
+        }
+        .faq-question {
+            font-weight: bold;
+            color: #ff0050;
+            margin-bottom: 4px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #7f8fa4;
+            margin-top: 1rem;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        .status-indicator.online {
+            background-color: #4ade80;
+        }
+        .status-indicator.offline {
+            background-color: #ef4444;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .server-status {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+        
+        .purchase-guide {
+            background: rgba(255, 0, 80, 0.1);
+            border-radius: 32px;
+            padding: 1.4rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 0, 80, 0.3);
+        }
+        .guide-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ff0050;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .guide-step {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .guide-num {
+            background: #ff0050;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+        .guide-link {
+            color: #64c8ff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .guide-link:hover {
+            color: #ff0050;
+        }
+        
+        @media (max-width: 500px) {
+            .card { padding: 1.2rem; }
+            .status-message { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="logo">👁️ TikTok Views</div>
+        <div class="tagline">🚀 زيادة مشاهدات تيك توك • مجاني • حقيقي • بدون كلمة مرور</div>
+        <div class="input-group">
+            <label style="color:#ff0050; font-weight:600;">📎 رابط الفيديو</label>
+            <input type="text" class="url-input" id="videoUrl" placeholder="https://www.tiktok.com/@username/video/..." dir="ltr">
+        </div>
+        <button class="glow-btn" id="startBtn"><span>⚡</span> ابدأ زيادة المشاهدات <span>🔥</span></button>
+        
+        <div class="progress-section" id="progressSection">
+            <div class="progress-label">
+                <span><span class="spinner"></span>جاري المعالجة...</span>
+                <span class="percentage-value" id="percentText">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p style="font-size:0.7rem; margin-top: 8px; text-align:center;">سيتم إرسال الطلب تلقائياً عند انتهاء المعالجة</p>
+        </div>
+        
+        <div class="status-message" id="statusMessage"></div>
+        
+        <p style="font-size:0.7rem; text-align:center; margin-top: 1rem;">✅ لا نحتاج كلمة سر • خدمات فورية</p>
+        <div class="server-status">
+            <span class="status-indicator offline" id="statusIndicator"></span>
+            <span id="statusText">جاري الاتصال بالخادم...</span>
+        </div>
+    </div>
+
+    <div class="rich-content">
+        <div class="section-title">📢 زيادة مشاهدات تيك توك</div>
+        <p>هل تبحث عن <strong>زيادة مشاهدات تيك توك حقيقية</strong>؟ موقع kd1s.com يقدم لك خدمة <strong>تكثيف المشاهدات</strong> بضغطة زر. فقط قم بلصق رابط الفيديو وسنقوم بزيادة عدد المشاهدات خلال دقائق. المشاهدات حقيقية ومدى الحياة، لا تختفي أبداً.</p>
+        <div class="keyword-cloud">
+            <span class="keyword">#زيادة_مشاهدات_تيك_توك</span><span class="keyword">#مشاهدات_حقيقية</span><span class="keyword">#تيك_توك_مجاني</span>
+        </div>
+    </div>
+
+    <div class="rich-content">
+        <div class="section-title">📌 كيف تحصل على آلاف المشاهدات؟</div>
+        <div class="step"><div class="step-num">1</div><div class="step-text">انسخ رابط الفيديو من تيك توك</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">ألصق الرابط في الخانة أعلاه</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">اضغط "ابدأ زيادة المشاهدات" وانتظر</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text">بعد اكتمال المعالجة، سيتم إرسال الطلب تلقائياً</div></div>
+        <p style="margin-top: 12px;">✨ <strong>ملاحظة:</strong> الطلب يتم معالجته بأمان على خادم سحابي، مما يضمن حماية بيانات API الخاصة بك.</p>
+    </div>
+
+    <div class="purchase-guide">
+        <div class="guide-title">💳 كيف تشتري الخدمات؟</div>
+        <div class="guide-step">
+            <div class="guide-num">1</div>
+            <div>
+                <strong>إنشاء حساب</strong><br>
+                <a href="https://kd1s.com/sign-up" target="_blank" class="guide-link">اضغط هنا لإنشاء حساب جديد</a>
+            </div>
+        </div>
+        <div class="guide-step">
+            <div class="guide-num">2</div>
+            <div>
+                <strong>شحن الرصيد</strong><br>
+                <a href="https://kd1s.com/services" target="_blank" class="guide-link">اذهب إلى تصفح الخدمات وشحّن رصيدك</a>
+            </div>
+        </div>
+        <div class="guide-step">
+            <div class="guide-num">3</div>
+            <div>
+                <strong>إنشاء طلب جديد</strong><br>
+                <a href="https://kd1s.com/" target="_blank" class="guide-link">اذهب إلى الموقع وأنشئ طلبك الآن</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="rich-content">
+        <div class="section-title">❓ أسئلة شائعة</div>
+        <div class="faq-question">هل المشاهدات حقيقية؟</div><div>نعم، حقيقية ولا تختفي.</div>
+        <div class="faq-question">هل أحتاج كلمة مرور؟</div><div>لا، فقط رابط الفيديو العام.</div>
+        <div class="faq-question">هل الخادم آمن؟</div><div>نعم، يعمل على خادم سحابي آمن ويخفي جميع مفاتيح API.</div>
+    </div>
+    <div class="footer">© 2025 kd1s.com – أداة زيادة مشاهدات تيك توك</div>
+</div>
+
+<script>
+    const startBtn = document.getElementById('startBtn');
+    const urlInput = document.getElementById('videoUrl');
+    const progressSection = document.getElementById('progressSection');
+    const progressFill = document.getElementById('progressFill');
+    const percentSpan = document.getElementById('percentText');
+    const statusMessage = document.getElementById('statusMessage');
+    const statusIndicator = document.getElementById('statusIndicator');
+    const statusText = document.getElementById('statusText');
+    
+    let isProcessing = false;
+    let serverOnline = false;
+    
+    const API_URL = 'https://tiktok-api-rae4.onrender.com/api/order';
+    const CONFIG_URL = 'https://tiktok-api-rae4.onrender.com/api/config';
+    const DEVICE_STATUS_URL = 'https://tiktok-api-rae4.onrender.com/api/device-status';
+    
+    let config = {};
+
+    function showStatusMessage(msg, type = 'processing') {
+        statusMessage.textContent = msg;
+        statusMessage.className = `status-message ${type}`;
+        statusMessage.style.display = 'flex';
+    }
+
+    function hideStatusMessage() {
+        statusMessage.style.display = 'none';
+    }
+
+    async function loadConfig() {
+        try {
+            const response = await fetch(CONFIG_URL);
+            const data = await response.json();
+            if (data.success) {
+                config = data.data['tiktok-views'];
+            }
+        } catch (error) {
+            console.error('خطأ في تحميل الإعدادات:', error);
+        }
+    }
+
+    async function checkDeviceStatus() {
+        try {
+            const response = await fetch(DEVICE_STATUS_URL);
+            const data = await response.json();
+            
+            if (data.success && !data.canOrder) {
+                startBtn.disabled = true;
+                showStatusMessage(`⏳ يمكنك إرسال طلب جديد بعد ${data.minutesUntilNextOrder} دقيقة`, 'warning');
+            }
+        } catch (error) {
+            console.error('خطأ في التحقق من حالة الجهاز:', error);
+        }
+    }
+
+    async function checkServerStatus() {
+        try {
+            const healthUrl = API_URL.replace('/api/order', '/api/health');
+            const response = await fetch(healthUrl, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (response.ok) {
+                serverOnline = true;
+                statusIndicator.className = 'status-indicator online';
+                statusText.textContent = '✅ الخادم متصل';
+                startBtn.disabled = false;
+                await loadConfig();
+                await checkDeviceStatus();
+            } else {
+                throw new Error('Server returned error');
+            }
+        } catch (error) {
+            serverOnline = false;
+            statusIndicator.className = 'status-indicator offline';
+            statusText.textContent = '❌ الخادم غير متصل';
+            startBtn.disabled = true;
+        }
+    }
+
+    checkServerStatus();
+    setInterval(checkServerStatus, 5000);
+
+    async function sendOrderToServer(link) {
+        try {
+            const payload = JSON.stringify({ 
+                link: link, 
+                serviceId: config.serviceId, 
+                quantity: config.quantity 
+            });
+            
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: payload
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                return { success: true, data: data };
+            } else {
+                return { success: false, error: data.error || 'Unknown error' };
+            }
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    function updateProgress(percent) {
+        if (percent > 100) percent = 100;
+        progressFill.style.width = percent + '%';
+        percentSpan.innerText = Math.floor(percent) + '%';
+    }
+
+    async function startBoostProcess() {
+        if (isProcessing) {
+            showStatusMessage('⏳ يوجد طلب قيد التنفيذ بالفعل', 'warning');
+            return;
+        }
+
+        if (!serverOnline) {
+            showStatusMessage('❌ الخادم غير متصل. تأكد من تشغيل الـ API', 'error');
+            return;
+        }
+
+        const url = urlInput.value.trim();
+        if (url === '') {
+            showStatusMessage('❌ الرجاء لصق الرابط أولاً', 'error');
+            return;
+        }
+
+        if (!url.includes('tiktok.com')) {
+            showStatusMessage('❌ الرجاء استخدام رابط تيك توك صحيح', 'error');
+            return;
+        }
+
+        isProcessing = true;
+        startBtn.disabled = true;
+        urlInput.disabled = true;
+        progressSection.style.display = 'block';
+        hideStatusMessage();
+        updateProgress(0);
+
+        const minSeconds = 2 * 60;
+        const maxSeconds = 5 * 60;
+        const randomSeconds = Math.floor(Math.random() * (maxSeconds - minSeconds + 1)) + minSeconds;
+        const totalMs = randomSeconds * 1000;
+
+        showStatusMessage('⏳ جاري المعالجة، يرجى الانتظار...', 'processing');
+
+        const startTime = Date.now();
+        const progressInterval = setInterval(() => {
+            const elapsedMs = Date.now() - startTime;
+            const progress = (elapsedMs / totalMs) * 100;
+            
+            if (progress >= 100) {
+                clearInterval(progressInterval);
+                updateProgress(100);
+            } else {
+                updateProgress(progress);
+            }
+        }, 100);
+
+        await new Promise(resolve => setTimeout(resolve, totalMs));
+        clearInterval(progressInterval);
+        updateProgress(100);
+
+        const result = await sendOrderToServer(url);
+
+        if (result.success) {
+            showStatusMessage('✅ تم إنشاء الطلب بنجاح! جاري معالجة المشاهدات...', 'success');
+            
+            setTimeout(() => {
+                isProcessing = false;
+                startBtn.disabled = false;
+                urlInput.disabled = false;
+                progressSection.style.display = 'none';
+                urlInput.value = '';
+                hideStatusMessage();
+                checkDeviceStatus();
+            }, 3000);
+        } else {
+            let errorMsg = result.error || 'حدث خطأ غير معروف';
+            
+            if (errorMsg.includes('هذا الرابط تم طلبه')) {
+                showStatusMessage(`⏳ ${errorMsg}`, 'warning');
+            } else {
+                showStatusMessage(`❌ ${errorMsg}`, 'error');
+            }
+            
+            updateProgress(0);
+            
+            setTimeout(() => {
+                isProcessing = false;
+                startBtn.disabled = false;
+                urlInput.disabled = false;
+                progressSection.style.display = 'none';
+                checkDeviceStatus();
+            }, 3000);
+        }
+    }
+
+    startBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        startBoostProcess();
+    });
+
+    urlInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            startBoostProcess();
+        }
+    });
+</script>
+
+</body>
+</html>

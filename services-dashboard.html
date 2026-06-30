@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="description" content="منصة موثوقة لزيادة متابعين انستقرام وتيك توك ومشاهدات وتفاعلات حقيقية. خدمات آمنة وسريعة على جميع منصات التواصل الاجتماعي.">
+    <meta name="keywords" content="زيادة متابعين, انستقرام, تيك توك, مشاهدات, تفاعلات, لايكات, فيسبوك, تليجرام">
+    <title>زيادة متابعين انستقرام وتيك توك - خدمات موثوقة | kd1s.com</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a0f1c, #03060c);
+            font-family: 'Segoe UI', 'Tahoma', 'Cairo', system-ui, sans-serif;
+            padding: 0.8rem;
+            color: #eef2ff;
+            line-height: 1.4;
+        }
+        .container { max-width: 550px; margin: 0 auto; }
+        
+        h1 {
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 0.3rem;
+            background: linear-gradient(135deg, #E1306C, #833AB4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        
+        .tagline {
+            font-size: 0.8rem;
+            text-align: center;
+            color: #E1306C;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .description {
+            font-size: 0.75rem;
+            text-align: center;
+            color: #b8c5d6;
+            margin-bottom: 1.2rem;
+            line-height: 1.4;
+            background: rgba(225, 48, 108, 0.05);
+            padding: 0.8rem;
+            border-radius: 12px;
+            border-left: 3px solid #E1306C;
+        }
+        
+        .services-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+        
+        .service-item {
+            background: rgba(15, 22, 36, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 16px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .service-item:hover {
+            border-color: #E1306C;
+            background: rgba(225, 48, 108, 0.08);
+            transform: translateX(-4px);
+        }
+        
+        .service-item.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            border-color: rgba(255, 140, 0, 0.1);
+        }
+        
+        .service-item.disabled:hover {
+            transform: none;
+            background: rgba(15, 22, 36, 0.7);
+        }
+        
+        .service-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex: 1;
+        }
+        
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(225, 48, 108, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .service-icon img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+        
+        .service-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        
+        .service-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #E1306C;
+        }
+        
+        .service-platform {
+            font-size: 0.7rem;
+            color: #b8c5d6;
+        }
+        
+        .service-arrow {
+            font-size: 1.2rem;
+            color: #b8c5d6;
+            transition: transform 0.3s ease;
+        }
+        
+        .service-status {
+            font-size: 0.65rem;
+            color: #f39c12;
+            font-weight: 600;
+            background: rgba(243, 156, 18, 0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 1rem 0;
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 2rem;
+        }
+        
+        .modal-content {
+            background: rgba(15, 22, 36, 0.95);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(225, 48, 108, 0.2);
+        }
+        
+        .modal-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #E1306C;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .modal-title img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: rgba(225, 48, 108, 0.1);
+            padding: 4px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: #b8c5d6;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: #E1306C;
+        }
+        
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .service-desc {
+            background: rgba(225, 48, 108, 0.05);
+            border-left: 3px solid #E1306C;
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: #b8c5d6;
+            line-height: 1.5;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .input-label {
+            font-size: 0.75rem;
+            color: #b8c5d6;
+            font-weight: 500;
+        }
+        
+        .url-input {
+            background: #0f1422;
+            border: 1px solid #2e3a55;
+            border-radius: 50px;
+            padding: 10px 14px;
+            color: white;
+            font-size: 0.85rem;
+            direction: ltr;
+            text-align: left;
+            outline: none;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .url-input::placeholder {
+            color: #7a8a9e;
+        }
+        
+        .url-input:focus { 
+            border-color: #E1306C; 
+            box-shadow: 0 0 6px rgba(225, 48, 108, 0.5); 
+        }
+        
+        .url-input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(105deg, #E1306C, #833AB4);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 18px -4px black;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: linear-gradient(105deg, #999, #777);
+        }
+        
+        .submit-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,250,210,0.7), transparent);
+            transform: skewX(-25deg);
+            animation: shineMove 3s infinite ease;
+            pointer-events: none;
+        }
+        
+        @keyframes shineMove {
+            0% { left: -120%; }
+            30% { left: 20%; }
+            100% { left: 120%; }
+        }
+        
+        .submit-btn:active:not(:disabled) { transform: scale(0.97); }
+        
+        .progress-section {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            margin-bottom: 5px;
+            color: #E1306C;
+        }
+        
+        .progress-bar-bg {
+            background: #1f2a3c;
+            border-radius: 30px;
+            height: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #E1306C, #833AB4);
+            width: 0%;
+            height: 100%;
+            border-radius: 30px;
+            transition: width 0.2s linear;
+        }
+        
+        .message {
+            margin-top: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.8rem;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.show {
+            display: block;
+        }
+        
+        .message.success {
+            background: rgba(49, 162, 76, 0.2);
+            border: 1px solid #31a24c;
+            color: #31a24c;
+        }
+        
+        .message.error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .message.warning {
+            background: rgba(243, 156, 18, 0.2);
+            border: 1px solid #f39c12;
+            color: #f39c12;
+        }
+        
+        .order-info {
+            margin-top: 0.8rem;
+            padding: 1rem;
+            background: rgba(49, 162, 76, 0.15);
+            border: 2px solid #31a24c;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.85rem;
+            color: #31a24c;
+            text-align: center;
+        }
+        
+        .order-id {
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin: 0.5rem 0;
+            font-family: monospace;
+            background: rgba(49, 162, 76, 0.2);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+        
+        .timer-info {
+            margin-top: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(243, 156, 18, 0.1);
+            border-left: 3px solid #f39c12;
+            border-radius: 10px;
+            display: none;
+            font-size: 0.8rem;
+            color: #f39c12;
+            text-align: center;
+        }
+        
+        .server-status {
+            margin-top: 0.8rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            background: rgba(255,255,255,0.03);
+            padding: 0.5rem 0.8rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.04);
+            display: table;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .server-status .indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #64748b;
+            margin-left: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        .server-status .indicator.connected {
+            background: #34d399;
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.9); }
+        }
+
+        .seo-content {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(131, 58, 180, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(131, 58, 180, 0.2);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: #b8c5d6;
+        }
+
+        .seo-content h3 {
+            font-size: 0.9rem;
+            color: #833AB4;
+            margin-bottom: 0.6rem;
+        }
+
+        .seo-content p {
+            margin-bottom: 0.6rem;
+        }
+
+        .seo-content strong {
+            color: #E1306C;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 منصة زيادة التفاعل الاجتماعي</h1>
+    <p class="tagline">متابعين حقيقيين ومشاهدات آمنة</p>
+    <p class="description">احصل على متابعين ومشاهدات وتفاعلات حقيقية على جميع منصات التواصل الاجتماعي بطريقة آمنة وموثوقة</p>
+
+    <div class="container">
+        <div class="services-list" id="servicesList"></div>
+        
+        <div class="seo-content">
+            <h3>✨ خدمات موثوقة وآمنة</h3>
+            <p>نوفر <strong>خدمات زيادة متابعين</strong> على منصات التواصل الاجتماعي المختلفة. متابعين <strong>حقيقيين وآمنين</strong> لا تؤثر على حسابك.</p>
+            <p><strong>زيادة متابعين Instagram:</strong> احصل على متابعين حقيقيين لحسابك على انستقرام بطريقة آمنة وسريعة. خدمات تشمل المتابعين واللايكات والمشاهدات والمشاركات.</p>
+            <p><strong>زيادة متابعين TikTok:</strong> متابعين وتفاعلات طبيعية على تيك توك. مشاهدات وتفاعلات إيجابية تزيد من انتشار محتواك.</p>
+            <p><strong>خدمات Telegram و Facebook:</strong> أعضاء حقيقيين لقنوات تليجرام ومشاهدات فيسبوك آمنة وموثوقة.</p>
+            <p>اختر من <strong>13 خدمة متنوعة</strong> لجميع احتياجاتك. معالجة <strong>سريعة وفعالة</strong> مع ضمان الجودة والأمان 100%.</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle"></div>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="service-desc" id="serviceDesc"></div>
+                <div class="input-group">
+                    <label class="input-label" id="urlLabel">🔗 رابط الحساب:</label>
+                    <input type="url" id="serviceLink" class="url-input" placeholder="أدخل الرابط" required>
+                </div>
+                <button class="submit-btn" id="submitServiceBtn">إرسال الطلب</button>
+                <div class="progress-section" id="progressSection">
+                    <div class="progress-label">
+                        <span>جاري المعالجة...</span>
+                        <span id="percentage">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                <div class="message" id="message"></div>
+                <div class="order-info" id="orderInfo">
+                    <div>✅ تم إنشاء الطلب بنجاح!</div>
+                    <div class="order-id" id="orderId"></div>
+                    <div id="remainingTime"></div>
+                </div>
+                <div class="timer-info" id="timerInfo"></div>
+                <div class="server-status">
+                    <span class="indicator connected"></span>
+                    <span>✅ الخادم متصل</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://tiktok-api-rae4.onrender.com/api/order';
+
+        const SERVICES = [
+            { id: 1, name: 'متابعين Instagram', serviceId: 17737, quantity: 10, platform: 'Instagram', image: 'https://storage.perfectcdn.com/56cc9e/od4whfnbqwaninrp.jpg', urlType: 'رابط الحساب' },
+            { id: 2, name: 'متابعين TikTok', serviceId: 17629, quantity: 10, platform: 'TikTok', image: 'https://storage.perfectcdn.com/56cc9e/ab3779uett34z4gq.jpg', urlType: 'رابط الحساب' },
+            { id: 3, name: 'مشاهدات TikTok', serviceId: 13372, quantity: 100, platform: 'TikTok', image: 'https://storage.perfectcdn.com/56cc9e/ab3779uett34z4gq.jpg', urlType: 'رابط الفيديو' },
+            { id: 4, name: 'لايكات Instagram', serviceId: 17512, quantity: 10, platform: 'Instagram', image: 'https://storage.perfectcdn.com/56cc9e/od4whfnbqwaninrp.jpg', urlType: 'رابط البوست' },
+            { id: 5, name: 'لايكات TikTok', serviceId: 17648, quantity: 10, platform: 'TikTok', image: 'https://storage.perfectcdn.com/56cc9e/ab3779uett34z4gq.jpg', urlType: 'رابط الفيديو' },
+            { id: 6, name: 'مشاهدات Reels', serviceId: 17337, quantity: 100, platform: 'Instagram', image: 'https://storage.perfectcdn.com/56cc9e/od4whfnbqwaninrp.jpg', urlType: 'رابط الريلز' },
+            { id: 7, name: 'مشاهدات بوست Telegram', serviceId: 15864, quantity: 10, platform: 'Telegram', image: 'https://storage.perfectcdn.com/56cc9e/r9uh2068up08enp0.jpg', urlType: 'رابط البوست' },
+            { id: 8, name: 'تفاعلات Telegram', serviceId: 16682, quantity: 5, platform: 'Telegram', image: 'https://storage.perfectcdn.com/56cc9e/r9uh2068up08enp0.jpg', urlType: 'رابط البوست' },
+            { id: 9, name: 'أعضاء Telegram', serviceId: 14680, quantity: 10, platform: 'Telegram', image: 'https://storage.perfectcdn.com/56cc9e/r9uh2068up08enp0.jpg', urlType: 'رابط القناة' },
+            { id: 10, name: 'مشاركات Reels', serviceId: 14149, quantity: 100, platform: 'Instagram', image: 'https://storage.perfectcdn.com/56cc9e/od4whfnbqwaninrp.jpg', urlType: 'رابط الريلز' },
+            { id: 11, name: 'مشاركات TikTok', serviceId: 17207, quantity: 10, platform: 'TikTok', image: 'https://storage.perfectcdn.com/56cc9e/ab3779uett34z4gq.jpg', urlType: 'رابط الفيديو' },
+            { id: 12, name: 'مشاهدات Facebook', serviceId: 16930, quantity: 10, platform: 'Facebook', image: 'https://storage.perfectcdn.com/56cc9e/azdnduhzp3e2xx5f.jpg', urlType: 'رابط البوست' },
+            { id: 13, name: 'لايكات Reels', serviceId: 17758, quantity: 10, platform: 'Instagram', image: 'https://storage.perfectcdn.com/56cc9e/od4whfnbqwaninrp.jpg', urlType: 'رابط الريلز' }
+        ];
+
+        let currentService = null;
+        let clientFingerprint = '';
+        let isProcessing = false;
+        let lastOrderTime = 0;
+        const COOLDOWN_MS = 60 * 60 * 1000;
+
+        function generateClientFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#f60';
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = '#069';
+            ctx.fillText('FP', 2, 15);
+            const canvasData = canvas.toDataURL();
+            return btoa(canvasData).substring(0, 32);
+        }
+
+        function initializeServices() {
+            const list = document.getElementById('servicesList');
+            list.innerHTML = '';
+            
+            SERVICES.forEach(service => {
+                const isDisabled = lastOrderTime > 0 && (Date.now() - lastOrderTime) < COOLDOWN_MS;
+                const item = document.createElement('div');
+                item.className = `service-item ${isDisabled ? 'disabled' : ''}`;
+                
+                let statusHtml = '';
+                if (isDisabled) {
+                    const remaining = COOLDOWN_MS - (Date.now() - lastOrderTime);
+                    const minutes = Math.ceil(remaining / 60000);
+                    statusHtml = `<div class="service-status">⏳ متاح بعد ${minutes} دقيقة</div>`;
+                }
+                
+                item.innerHTML = `
+                    <div class="service-left">
+                        <div class="service-icon">
+                            <img src="${service.image}" alt="${service.name}" onerror="this.style.display='none'">
+                        </div>
+                        <div class="service-info">
+                            <div class="service-name">${service.name}</div>
+                            <div class="service-platform">${service.platform}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        ${statusHtml}
+                        <div class="service-arrow">▶</div>
+                    </div>
+                `;
+                
+                if (!isDisabled) {
+                    item.addEventListener('click', () => openModal(service));
+                }
+                
+                list.appendChild(item);
+            });
+        }
+
+        function openModal(service) {
+            currentService = service;
+            document.getElementById('modalTitle').innerHTML = `<img src="${service.image}" alt="${service.name}" onerror="this.style.display='none'"> ${service.name}`;
+            document.getElementById('urlLabel').textContent = `🔗 ${service.urlType}:`;
+            document.getElementById('serviceLink').placeholder = `أدخل ${service.urlType}`;
+            document.getElementById('serviceDesc').innerHTML = `
+                <strong>الخدمة:</strong> ${service.name}<br>
+                <strong>المنصة:</strong> ${service.platform}<br>
+                <strong>نوع الرابط:</strong> ${service.urlType}<br>
+                <strong>السرعة:</strong> معالجة فورية<br>
+                <strong>الأمان:</strong> آمن 100%
+            `;
+            document.getElementById('serviceLink').value = '';
+            document.getElementById('message').classList.remove('show');
+            document.getElementById('orderInfo').style.display = 'none';
+            document.getElementById('timerInfo').style.display = 'none';
+            document.getElementById('progressSection').style.display = 'none';
+            document.getElementById('serviceModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('serviceModal').classList.remove('show');
+            currentService = null;
+        }
+
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        function formatTime(ms) {
+            const totalSeconds = Math.ceil(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            if (minutes > 0) {
+                return `${minutes} دقيقة و ${seconds} ثانية`;
+            }
+            return `${seconds} ثانية`;
+        }
+
+        function showMessage(text, type = 'info') {
+            const msgEl = document.getElementById('message');
+            msgEl.textContent = text;
+            msgEl.className = `message show ${type}`;
+        }
+
+        function updateProgress(percentage) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('percentage').textContent = Math.round(percentage) + '%';
+        }
+
+        function startCountdown(timeRemaining, orderId) {
+            const remainingEl = document.getElementById('remainingTime');
+            const timerEl = document.getElementById('timerInfo');
+            timerEl.style.display = 'block';
+            
+            remainingEl.innerHTML = `⋳ <strong>الطلب التالي متاح بعد:</strong><br><span id="countdown"></span>`;
+            
+            const updateTimer = () => {
+                const now = Date.now();
+                const remaining = timeRemaining - now;
+                if (remaining > 0) {
+                    document.getElementById('countdown').textContent = formatTime(remaining);
+                    timerEl.innerHTML = `⋳ <strong>الطلب التالي متاح بعد:</strong><br>${formatTime(remaining)}`;
+                    setTimeout(updateTimer, 1000);
+                } else {
+                    remainingEl.innerHTML = '';
+                    timerEl.style.display = 'none';
+                    initializeServices();
+                }
+            };
+            updateTimer();
+        }
+
+        document.getElementById('submitServiceBtn').addEventListener('click', async () => {
+            if (isProcessing || !currentService) return;
+
+            const link = document.getElementById('serviceLink').value;
+            if (!link) {
+                showMessage('⚠️ أدخل رابط الحساب', 'warning');
+                return;
+            }
+
+            if (!isValidUrl(link)) {
+                showMessage('⚠️ أدخل رابط صحيح', 'warning');
+                return;
+            }
+
+            const now = Date.now();
+            const timeSinceLastOrder = now - lastOrderTime;
+            if (lastOrderTime > 0 && timeSinceLastOrder < COOLDOWN_MS) {
+                const remaining = COOLDOWN_MS - timeSinceLastOrder;
+                showMessage(`❌ يجب الانتظار ${formatTime(remaining)} قبل طلب جديد`, 'error');
+                return;
+            }
+
+            isProcessing = true;
+            document.getElementById('submitServiceBtn').disabled = true;
+            document.getElementById('serviceLink').disabled = true;
+
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('message').style.display = 'none';
+            document.getElementById('orderInfo').style.display = 'none';
+
+            const minMs = 1 * 60 * 1000;
+            const startTime = Date.now();
+
+            const progressInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const progress = (elapsed / minMs) * 100;
+                updateProgress(Math.min(progress, 100));
+            }, 100);
+
+            await new Promise(resolve => setTimeout(resolve, minMs));
+            clearInterval(progressInterval);
+            updateProgress(100);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        link: link,
+                        serviceId: currentService.serviceId,
+                        quantity: currentService.quantity,
+                        clientFingerprint: clientFingerprint
+                    })
+                });
+
+                const result = await response.json();
+                document.getElementById('progressSection').style.display = 'none';
+
+                if (result.success) {
+                    lastOrderTime = now;
+                    document.getElementById('orderInfo').style.display = 'block';
+                    document.getElementById('orderId').textContent = `رقم الطلب: ${result.orderId || 'N/A'}`;
+                    
+                    const nextAllowedTime = new Date(result.nextAllowedTime).getTime();
+                    startCountdown(nextAllowedTime, result.orderId);
+                    document.getElementById('serviceLink').value = '';
+                    
+                    setTimeout(() => {
+                        initializeServices();
+                    }, 500);
+                } else {
+                    showMessage(result.error || '❌ حدث خطأ', 'error');
+                }
+            } catch (error) {
+                document.getElementById('progressSection').style.display = 'none';
+                showMessage('❌ خطأ في الاتصال: ' + error.message, 'error');
+            }
+
+            isProcessing = false;
+            document.getElementById('submitServiceBtn').disabled = false;
+            document.getElementById('serviceLink').disabled = false;
+        });
+
+        async function initialize() {
+            clientFingerprint = generateClientFingerprint();
+            initializeServices();
+        }
+
+        window.addEventListener('load', initialize);
+        document.getElementById('serviceModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('serviceModal')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
