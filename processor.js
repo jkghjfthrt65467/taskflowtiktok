@@ -17,97 +17,110 @@ const CHECK_INTERVAL = 1000; // 1 ثانية
 const DUPLICATE_CHECK_WINDOW = 30 * 60 * 1000; // 30 دقيقة
 
 // تخزين مؤقت للطلبات المعالجة
-const processedOrders = new Map();
-const userLastOrder = new Map();
+const userServiceOrders = new Map(); // تتبع آخر طلب لكل مستخدم على الخدمة
+const urlOrders = new Map(); // تتبع آخر طلب لكل رابط
 let totalProcessed = 0;
 let totalCreated = 0;
 let totalFailed = 0;
 
-// التحقق من صحة الرابط
-function isValidUrl(urlString) {
+// التحقق من أن الرابط هو ريلز انستقرام
+function isInstagramReel(urlString) {
   try {
     const urlObj = new URL(urlString);
-    // التحقق من أن الرابط يحتوي على نطاق صحيح
-    const validDomains = [
-      'instagram.com',
-      'tiktok.com',
-      'vt.tiktok.com',
-      'vm.tiktok.com',
-      'youtu.be',
-      'youtube.com',
-      'facebook.com',
-      'twitter.com',
-      'x.com'
-    ];
-    
     const hostname = urlObj.hostname.toLowerCase();
-    return validDomains.some(domain => hostname.includes(domain));
+    const pathname = urlObj.pathname.toLowerCase();
+    
+    // يجب أن يكون من instagram.com
+    if (!hostname.includes('instagram.com')) {
+      return false;
+    }
+    
+    // يجب أن يحتوي على /reel/
+    if (!pathname.includes('/reel/')) {
+      return false;
+    }
+    
+    return true;
   } catch {
     return false;
   }
 }
 
 // تنظيف الرابط من الشوائب
-function normalizeUrl(urlString) {
+function cleanUrl(urlString) {
   try {
     const urlObj = new URL(urlString);
-    return `${urlObj.protocol}//${urlObj.hostname}${urlObj.pathname}`.toLowerCase();
+    // إزالة المعاملات الإضافية، الاحتفاظ فقط بـ protocol, hostname, pathname
+    return `${urlObj.protocol}//${urlObj.hostname}${urlObj.pathname}`;
   } catch {
-    return urlString.toLowerCase();
+    return urlString;
   }
 }
 
 // حساب hash للرابط
 function hashUrl(urlString) {
-  return crypto.createHash('sha256').update(normalizeUrl(urlString)).digest('hex');
+  const cleanedUrl = cleanUrl(urlString).toLowerCase();
+  return crypto.createHash('sha256').update(cleanedUrl).digest('hex');
 }
 
-// فحص التكرار
-function isDuplicate(userId, urlString) {
+// فحص إذا كان لدى المستخدم طلب على نفس الخدمة خلال 30 دقيقة
+function hasUserRecentOrderOnService(userId) {
   const now = Date.now();
-  const userKey = `user_${userId}`;
+  const userKey = `user_${userId}_service_${SERVICE_ID_TO_CHECK}`;
+  
+  if (userServiceOrders.has(userKey)) {
+    const lastTime = userServiceOrders.get(userKey);
+    if (now - lastTime < DUPLICATE_CHECK_WINDOW) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+// فحص إذا كان هناك طلب على نفس الرابط خلال 30 دقيقة
+function hasRecentOrderOnUrl(urlString) {
+  const now = Date.now();
   const urlHash = hashUrl(urlString);
   const urlKey = `url_${urlHash}`;
-
-  // فحص آخر طلب من نفس المستخدم
-  if (userLastOrder.has(userKey)) {
-    const lastTime = userLastOrder.get(userKey);
+  
+  if (urlOrders.has(urlKey)) {
+    const lastTime = urlOrders.get(urlKey);
     if (now - lastTime < DUPLICATE_CHECK_WINDOW) {
       return true;
     }
   }
-
-  // فحص آخر طلب لنفس الرابط
-  if (processedOrders.has(urlKey)) {
-    const lastTime = processedOrders.get(urlKey);
-    if (now - lastTime < DUPLICATE_CHECK_WINDOW) {
-      return true;
-    }
-  }
-
+  
   return false;
 }
 
 // تسجيل الطلب
 function recordOrder(userId, urlString) {
   const now = Date.now();
-  userLastOrder.set(`user_${userId}`, now);
-  processedOrders.set(`url_${hashUrl(urlString)}`, now);
+  
+  // تسجيل آخر طلب للمستخدم على الخدمة
+  const userKey = `user_${userId}_service_${SERVICE_ID_TO_CHECK}`;
+  userServiceOrders.set(userKey, now);
+  
+  // تسجيل آخر طلب للرابط
+  const urlHash = hashUrl(urlString);
+  const urlKey = `url_${urlHash}`;
+  urlOrders.set(urlKey, now);
 }
 
 // تنظيف البيانات القديمة
 function cleanupOldData() {
   const now = Date.now();
   
-  for (const [key, time] of userLastOrder.entries()) {
+  for (const [key, time] of userServiceOrders.entries()) {
     if (now - time > DUPLICATE_CHECK_WINDOW) {
-      userLastOrder.delete(key);
+      userServiceOrders.delete(key);
     }
   }
   
-  for (const [key, time] of processedOrders.entries()) {
+  for (const [key, time] of urlOrders.entries()) {
     if (now - time > DUPLICATE_CHECK_WINDOW) {
-      processedOrders.delete(key);
+      urlOrders.delete(key);
     }
   }
 }
@@ -147,11 +160,12 @@ async function processOrders() {
         console.log(`📈 الكمية: ${quantity}`);
         console.log(`🎯 الخدمة: ${service_name}`);
 
-        // 1. فحص صحة الرابط
-        if (!isValidUrl(link)) {
-          console.log(`❌ الرابط غير صحيح - إلغاء الطلب`);
+        // ============================================
+        // الفحص 1️⃣: هل لديه طلب على نفس الخدمة خلال 30 دقيقة؟
+        // ============================================
+        if (hasUserRecentOrderOnService(user)) {
+          console.log(`⚠️ المستخدم لديه طلب سابق على نفس الخدمة خلال 30 دقيقة - إلغاء الطلب`);
           
-          // إلغاء الطلب مع استرجاع المبلغ
           try {
             await axios.post(
               `${ADMIN_API_URL}/orders/cancel`,
@@ -170,16 +184,18 @@ async function processOrders() {
           }
           
           totalFailed++;
+          console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
           continue;
         }
 
-        console.log(`✅ الرابط صحيح`);
+        console.log(`✅ لا يوجد طلب سابق للمستخدم على هذه الخدمة`);
 
-        // 2. فحص التكرار
-        if (isDuplicate(user, link)) {
-          console.log(`⚠️ طلب مكرر - إلغاء الطلب`);
+        // ============================================
+        // الفحص 2️⃣: هل هناك طلب على نفس الرابط خلال 30 دقيقة؟
+        // ============================================
+        if (hasRecentOrderOnUrl(link)) {
+          console.log(`⚠️ هناك طلب سابق على نفس الرابط خلال 30 دقيقة - إلغاء الطلب`);
           
-          // إلغاء الطلب مع استرجاع المبلغ
           try {
             await axios.post(
               `${ADMIN_API_URL}/orders/cancel`,
@@ -192,25 +208,64 @@ async function processOrders() {
                 timeout: 10000
               }
             );
-            console.log(`✅ تم إلغاء الطلب المكرر وإرجاع المبلغ`);
+            console.log(`✅ تم إلغاء الطلب وإرجاع المبلغ`);
           } catch (cancelError) {
             console.log(`⚠️ فشل إلغاء الطلب: ${cancelError.message}`);
           }
           
           totalFailed++;
+          console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
           continue;
         }
 
-        console.log(`✅ الطلب ليس مكرر`);
+        console.log(`✅ لا يوجد طلب سابق على هذا الرابط`);
 
-        // 3. إنشاء طلب جديد في External API
+        // ============================================
+        // الفحص 3️⃣: هل الرابط هو ريلز انستقرام؟
+        // ============================================
+        if (!isInstagramReel(link)) {
+          console.log(`❌ الرابط ليس ريلز انستقرام - إلغاء الطلب`);
+          
+          try {
+            await axios.post(
+              `${ADMIN_API_URL}/orders/cancel`,
+              { order_ids: [id] },
+              { 
+                headers: { 
+                  'X-Api-Key': ADMIN_API_KEY,
+                  'Content-Type': 'application/json'
+                },
+                timeout: 10000
+              }
+            );
+            console.log(`✅ تم إلغاء الطلب وإرجاع المبلغ`);
+          } catch (cancelError) {
+            console.log(`⚠️ فشل إلغاء الطلب: ${cancelError.message}`);
+          }
+          
+          totalFailed++;
+          console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+          continue;
+        }
+
+        console.log(`✅ الرابط هو ريلز انستقرام`);
+
+        // ============================================
+        // تنظيف الرابط من الشوائب
+        // ============================================
+        const cleanedUrl = cleanUrl(link);
+        console.log(`🧹 تنظيف الرابط: ${cleanedUrl}`);
+
+        // ============================================
+        // الفحص 4️⃣: إنشاء طلب جديد
+        // ============================================
         console.log(`📤 إنشاء طلب جديد في External API...`);
         
         const params = new URLSearchParams();
         params.append('key', EXTERNAL_API_KEY);
         params.append('action', 'add');
         params.append('service', SERVICE_ID_TO_SEND.toString());
-        params.append('link', link);
+        params.append('link', cleanedUrl);
         params.append('quantity', quantity.toString());
 
         const createResponse = await axios.post(
@@ -229,7 +284,9 @@ async function processOrders() {
         if (newOrderId) {
           console.log(`✅ تم إنشاء طلب جديد: ${newOrderId}`);
 
-          // 4. تحديث حالة الطلب الأصلي إلى "مكتمل" باستخدام /orders/change-status
+          // ============================================
+          // تحديث حالة الطلب الأصلي إلى "مكتمل"
+          // ============================================
           console.log(`🔄 تحديث حالة الطلب إلى مكتمل...`);
           
           try {
@@ -261,9 +318,6 @@ async function processOrders() {
             }
           } catch (updateError) {
             console.log(`⚠️ خطأ في تحديث الحالة: ${updateError.message}`);
-            if (updateError.response?.data) {
-              console.log(`   البيانات: ${JSON.stringify(updateError.response.data)}`);
-            }
             totalFailed++;
           }
           
@@ -288,6 +342,8 @@ async function processOrders() {
     console.log(`   ✅ معالجة: ${totalProcessed}`);
     console.log(`   ✅ مكتمل: ${totalCreated}`);
     console.log(`   ❌ فشل: ${totalFailed}`);
+    console.log(`   📍 مستخدمين مسجلين: ${userServiceOrders.size}`);
+    console.log(`   🔗 روابط مسجلة: ${urlOrders.size}`);
 
   } catch (error) {
     console.error(`\n❌ خطأ في جلب الطلبات:`, error.message);
@@ -328,8 +384,8 @@ app.get('/api/stats', (req, res) => {
       totalProcessed: totalProcessed,
       totalCreated: totalCreated,
       totalFailed: totalFailed,
-      trackedUrls: processedOrders.size,
-      trackedUsers: userLastOrder.size,
+      trackedUsers: userServiceOrders.size,
+      trackedUrls: urlOrders.size,
       timestamp: new Date().toISOString()
     }
   });
