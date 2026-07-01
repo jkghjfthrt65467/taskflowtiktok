@@ -152,20 +152,24 @@ async function processOrders() {
           console.log(`❌ الرابط غير صحيح - إلغاء الطلب`);
           
           // إلغاء الطلب مع استرجاع المبلغ
-          await axios.post(
-            `${ADMIN_API_URL}/orders/cancel`,
-            { order_ids: [id] },
-            { 
-              headers: { 
-                'X-Api-Key': ADMIN_API_KEY,
-                'Content-Type': 'application/json'
-              },
-              timeout: 10000
-            }
-          );
+          try {
+            await axios.post(
+              `${ADMIN_API_URL}/orders/cancel`,
+              { order_ids: [id] },
+              { 
+                headers: { 
+                  'X-Api-Key': ADMIN_API_KEY,
+                  'Content-Type': 'application/json'
+                },
+                timeout: 10000
+              }
+            );
+            console.log(`✅ تم إلغاء الطلب وإرجاع المبلغ`);
+          } catch (cancelError) {
+            console.log(`⚠️ فشل إلغاء الطلب: ${cancelError.message}`);
+          }
           
           totalFailed++;
-          console.log(`✅ تم إلغاء الطلب وإرجاع المبلغ`);
           continue;
         }
 
@@ -176,20 +180,24 @@ async function processOrders() {
           console.log(`⚠️ طلب مكرر - إلغاء الطلب`);
           
           // إلغاء الطلب مع استرجاع المبلغ
-          await axios.post(
-            `${ADMIN_API_URL}/orders/cancel`,
-            { order_ids: [id] },
-            { 
-              headers: { 
-                'X-Api-Key': ADMIN_API_KEY,
-                'Content-Type': 'application/json'
-              },
-              timeout: 10000
-            }
-          );
+          try {
+            await axios.post(
+              `${ADMIN_API_URL}/orders/cancel`,
+              { order_ids: [id] },
+              { 
+                headers: { 
+                  'X-Api-Key': ADMIN_API_KEY,
+                  'Content-Type': 'application/json'
+                },
+                timeout: 10000
+              }
+            );
+            console.log(`✅ تم إلغاء الطلب المكرر وإرجاع المبلغ`);
+          } catch (cancelError) {
+            console.log(`⚠️ فشل إلغاء الطلب: ${cancelError.message}`);
+          }
           
           totalFailed++;
-          console.log(`✅ تم إلغاء الطلب المكرر وإرجاع المبلغ`);
           continue;
         }
 
@@ -221,30 +229,45 @@ async function processOrders() {
         if (newOrderId) {
           console.log(`✅ تم إنشاء طلب جديد: ${newOrderId}`);
 
-          // 4. تحديث حالة الطلب الأصلي إلى "مكتمل"
+          // 4. تحديث حالة الطلب الأصلي إلى "مكتمل" باستخدام /orders/update
           console.log(`🔄 تحديث حالة الطلب إلى مكتمل...`);
           
-          await axios.post(
-            `${ADMIN_API_URL}/orders/change-status`,
-            { 
-              order_ids: [id],
-              status: 'Completed'
-            },
-            { 
-              headers: { 
-                'X-Api-Key': ADMIN_API_KEY,
-                'Content-Type': 'application/json'
+          try {
+            const updateResponse = await axios.post(
+              `${ADMIN_API_URL}/orders/update`,
+              { 
+                orders: [
+                  {
+                    id: id,
+                    status: 'completed'
+                  }
+                ]
               },
-              timeout: 10000
-            }
-          );
+              { 
+                headers: { 
+                  'X-Api-Key': ADMIN_API_KEY,
+                  'Content-Type': 'application/json'
+                },
+                timeout: 10000
+              }
+            );
 
-          // تسجيل الطلب
-          recordOrder(user, link);
-          totalProcessed++;
-          totalCreated++;
+            if (updateResponse.data?.data?.orders?.[0]?.success) {
+              // تسجيل الطلب
+              recordOrder(user, link);
+              totalProcessed++;
+              totalCreated++;
+              
+              console.log(`✅ تم معالجة الطلب بنجاح`);
+            } else {
+              console.log(`⚠️ فشل تحديث الحالة: ${updateResponse.data?.data?.orders?.[0]?.error_message}`);
+              totalFailed++;
+            }
+          } catch (updateError) {
+            console.log(`⚠️ خطأ في تحديث الحالة: ${updateError.message}`);
+            totalFailed++;
+          }
           
-          console.log(`✅ تم معالجة الطلب بنجاح`);
           console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         } else {
           console.log(`❌ فشل إنشاء الطلب الجديد`);
