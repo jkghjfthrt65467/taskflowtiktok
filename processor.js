@@ -229,19 +229,15 @@ async function processOrders() {
         if (newOrderId) {
           console.log(`✅ تم إنشاء طلب جديد: ${newOrderId}`);
 
-          // 4. تحديث حالة الطلب الأصلي إلى "مكتمل" باستخدام /orders/update
+          // 4. تحديث حالة الطلب الأصلي إلى "مكتمل" باستخدام /orders/change-status
           console.log(`🔄 تحديث حالة الطلب إلى مكتمل...`);
           
           try {
             const updateResponse = await axios.post(
-              `${ADMIN_API_URL}/orders/update`,
+              `${ADMIN_API_URL}/orders/change-status`,
               { 
-                orders: [
-                  {
-                    id: id,
-                    status: 'completed'
-                  }
-                ]
+                ids: id.toString(),
+                status: 'completed'
               },
               { 
                 headers: { 
@@ -252,7 +248,7 @@ async function processOrders() {
               }
             );
 
-            if (updateResponse.data?.data?.orders?.[0]?.success) {
+            if (updateResponse.status === 200) {
               // تسجيل الطلب
               recordOrder(user, link);
               totalProcessed++;
@@ -260,11 +256,14 @@ async function processOrders() {
               
               console.log(`✅ تم معالجة الطلب بنجاح`);
             } else {
-              console.log(`⚠️ فشل تحديث الحالة: ${updateResponse.data?.data?.orders?.[0]?.error_message}`);
+              console.log(`⚠️ فشل تحديث الحالة`);
               totalFailed++;
             }
           } catch (updateError) {
             console.log(`⚠️ خطأ في تحديث الحالة: ${updateError.message}`);
+            if (updateError.response?.data) {
+              console.log(`   البيانات: ${JSON.stringify(updateError.response.data)}`);
+            }
             totalFailed++;
           }
           
