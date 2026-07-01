@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const crypto = require('crypto');
+const url = require('url');
 const app = express();
 
 app.use(express.json());
@@ -18,27 +19,54 @@ const DUPLICATE_CHECK_WINDOW = 30 * 60 * 1000; // 30 دقيقة
 // تخزين مؤقت للطلبات المعالجة
 const processedOrders = new Map();
 const userLastOrder = new Map();
+let totalProcessed = 0;
+let totalCreated = 0;
+let totalFailed = 0;
+
+// التحقق من صحة الرابط
+function isValidUrl(urlString) {
+  try {
+    const urlObj = new URL(urlString);
+    // التحقق من أن الرابط يحتوي على نطاق صحيح
+    const validDomains = [
+      'instagram.com',
+      'tiktok.com',
+      'vt.tiktok.com',
+      'vm.tiktok.com',
+      'youtu.be',
+      'youtube.com',
+      'facebook.com',
+      'twitter.com',
+      'x.com'
+    ];
+    
+    const hostname = urlObj.hostname.toLowerCase();
+    return validDomains.some(domain => hostname.includes(domain));
+  } catch {
+    return false;
+  }
+}
 
 // تنظيف الرابط من الشوائب
-function normalizeUrl(url) {
+function normalizeUrl(urlString) {
   try {
-    const urlObj = new URL(url);
+    const urlObj = new URL(urlString);
     return `${urlObj.protocol}//${urlObj.hostname}${urlObj.pathname}`.toLowerCase();
   } catch {
-    return url.toLowerCase();
+    return urlString.toLowerCase();
   }
 }
 
 // حساب hash للرابط
-function hashUrl(url) {
-  return crypto.createHash('sha256').update(normalizeUrl(url)).digest('hex');
+function hashUrl(urlString) {
+  return crypto.createHash('sha256').update(normalizeUrl(urlString)).digest('hex');
 }
 
 // فحص التكرار
-function isDuplicate(userId, url) {
+function isDuplicate(userId, urlString) {
   const now = Date.now();
   const userKey = `user_${userId}`;
-  const urlHash = hashUrl(url);
+  const urlHash = hashUrl(urlString);
   const urlKey = `url_${urlHash}`;
 
   // فحص آخر طلب من نفس المستخدم
@@ -61,10 +89,10 @@ function isDuplicate(userId, url) {
 }
 
 // تسجيل الطلب
-function recordOrder(userId, url) {
+function recordOrder(userId, urlString) {
   const now = Date.now();
   userLastOrder.set(`user_${userId}`, now);
-  processedOrders.set(`url_${hashUrl(url)}`, now);
+  processedOrders.set(`url_${hashUrl(urlString)}`, now);
 }
 
 // تنظيف البيانات القديمة
@@ -87,9 +115,9 @@ function cleanupOldData() {
 // معالجة الطلبات
 async function processOrders() {
   try {
-    console.log(`[${new Date().toISOString()}] جاري فحص الطلبات...`);
+    console.log(`\n[${new Date().toISOString()}] 🔄 جاري فحص الطلبات...`);
 
-    // جلب الطلبات من لوحة الإدارة باستخدام المسار الصحيح
+    // جلب الطلبات من لوحة الإدارة
     const response = await axios.post(
       `${ADMIN_API_URL}/orders/pull`,
       {
@@ -106,15 +134,22 @@ async function processOrders() {
     );
 
     const orders = response.data.data?.list || [];
-    console.log(`وجدت ${orders.length} طلب معلق`);
+    console.log(`📊 وجدت ${orders.length} طلب معلق`);
 
     for (const order of orders) {
       try {
-        const { id, user, link, quantity } = order;
+        const { id, user, link, quantity, service_name } = order;
 
-        // فحص التكرار
-        if (isDuplicate(user, link)) {
-          console.log(`[تكرار] الطلب ${id} - إلغاء مع استرجاع المبلغ`);
+        console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+        console.log(`📋 معالجة الطلب: ${id}`);
+        console.log(`👤 المستخدم: ${user}`);
+        console.log(`🔗 الرابط: ${link}`);
+        console.log(`📈 الكمية: ${quantity}`);
+        console.log(`🎯 الخدمة: ${service_name}`);
+
+        // 1. فحص صحة الرابط
+        if (!isValidUrl(link)) {
+          console.log(`❌ الرابط غير صحيح - إلغاء الطلب`);
           
           // إلغاء الطلب مع استرجاع المبلغ
           await axios.post(
@@ -128,11 +163,40 @@ async function processOrders() {
               timeout: 10000
             }
           );
+          
+          totalFailed++;
+          console.log(`✅ تم إلغاء الطلب وإرجاع المبلغ`);
           continue;
         }
 
-        // إرسال الطلب للمرحلة الثانية باستخدام Form Data
-        console.log(`[إرسال] الطلب ${id} للمرحلة الثانية`);
+        console.log(`✅ الرابط صحيح`);
+
+        // 2. فحص التكرار
+        if (isDuplicate(user, link)) {
+          console.log(`⚠️ طلب مكرر - إلغاء الطلب`);
+          
+          // إلغاء الطلب مع استرجاع المبلغ
+          await axios.post(
+            `${ADMIN_API_URL}/orders/cancel`,
+            { order_ids: [id] },
+            { 
+              headers: { 
+                'X-Api-Key': ADMIN_API_KEY,
+                'Content-Type': 'application/json'
+              },
+              timeout: 10000
+            }
+          );
+          
+          totalFailed++;
+          console.log(`✅ تم إلغاء الطلب المكرر وإرجاع المبلغ`);
+          continue;
+        }
+
+        console.log(`✅ الطلب ليس مكرر`);
+
+        // 3. إنشاء طلب جديد في External API
+        console.log(`📤 إنشاء طلب جديد في External API...`);
         
         const params = new URLSearchParams();
         params.append('key', EXTERNAL_API_KEY);
@@ -141,7 +205,7 @@ async function processOrders() {
         params.append('link', link);
         params.append('quantity', quantity.toString());
 
-        await axios.post(
+        const createResponse = await axios.post(
           EXTERNAL_API_URL,
           params,
           {
@@ -152,21 +216,59 @@ async function processOrders() {
           }
         );
 
-        // تسجيل الطلب
-        recordOrder(user, link);
+        const newOrderId = createResponse.data?.order;
         
-        console.log(`✅ تم معالجة الطلب ${id} بنجاح`);
+        if (newOrderId) {
+          console.log(`✅ تم إنشاء طلب جديد: ${newOrderId}`);
+
+          // 4. تحديث حالة الطلب الأصلي إلى "مكتمل"
+          console.log(`🔄 تحديث حالة الطلب إلى مكتمل...`);
+          
+          await axios.post(
+            `${ADMIN_API_URL}/orders/change-status`,
+            { 
+              order_ids: [id],
+              status: 'Completed'
+            },
+            { 
+              headers: { 
+                'X-Api-Key': ADMIN_API_KEY,
+                'Content-Type': 'application/json'
+              },
+              timeout: 10000
+            }
+          );
+
+          // تسجيل الطلب
+          recordOrder(user, link);
+          totalProcessed++;
+          totalCreated++;
+          
+          console.log(`✅ تم معالجة الطلب بنجاح`);
+          console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+        } else {
+          console.log(`❌ فشل إنشاء الطلب الجديد`);
+          totalFailed++;
+          console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+        }
 
       } catch (error) {
-        console.error(`❌ خطأ في معالجة الطلب:`, error.message);
+        console.error(`❌ خطأ في معالجة الطلب ${order.id}:`, error.message);
+        totalFailed++;
       }
     }
 
     // تنظيف البيانات القديمة
     cleanupOldData();
 
+    // طباعة الإحصائيات
+    console.log(`\n📊 الإحصائيات:`);
+    console.log(`   ✅ معالجة: ${totalProcessed}`);
+    console.log(`   ✅ مكتمل: ${totalCreated}`);
+    console.log(`   ❌ فشل: ${totalFailed}`);
+
   } catch (error) {
-    console.error(`❌ خطأ في جلب الطلبات:`, error.message);
+    console.error(`\n❌ خطأ في جلب الطلبات:`, error.message);
     if (error.response) {
       console.error(`   رمز الحالة: ${error.response.status}`);
       console.error(`   البيانات: ${JSON.stringify(error.response.data)}`);
@@ -201,7 +303,10 @@ app.get('/api/stats', (req, res) => {
   res.json({
     success: true,
     stats: {
-      processedOrders: processedOrders.size,
+      totalProcessed: totalProcessed,
+      totalCreated: totalCreated,
+      totalFailed: totalFailed,
+      trackedUrls: processedOrders.size,
       trackedUsers: userLastOrder.size,
       timestamp: new Date().toISOString()
     }
@@ -211,11 +316,14 @@ app.get('/api/stats', (req, res) => {
 // بدء الخادم
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`\n🚀 Processor running on port ${PORT}`);
+  console.log(`\n${'='.repeat(60)}`);
+  console.log(`🚀 Processor running on port ${PORT}`);
+  console.log(`${'='.repeat(60)}`);
   console.log(`📡 Admin API: ${ADMIN_API_URL}`);
   console.log(`📤 External API: ${EXTERNAL_API_URL}`);
   console.log(`📊 Service to check: ${SERVICE_ID_TO_CHECK}`);
   console.log(`📤 Service to send: ${SERVICE_ID_TO_SEND}`);
   console.log(`⏱️ Check interval: ${CHECK_INTERVAL / 1000} seconds`);
-  console.log(`🔍 Duplicate check window: ${DUPLICATE_CHECK_WINDOW / 60000} minutes\n`);
+  console.log(`🔍 Duplicate check window: ${DUPLICATE_CHECK_WINDOW / 60000} minutes`);
+  console.log(`${'='.repeat(60)}\n`);
 });
