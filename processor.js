@@ -7,7 +7,7 @@ app.use(express.json());
 
 // الإعدادات
 const ADMIN_API_URL = 'https://kd1s.com/adminapi/v2';
-const ADMIN_API_KEY = '9495qsacgcm64hj0z1sprxce7qj0nkbh71w6h6xumigan8h141koirzkxwoqg48b';
+const ADMIN_API_KEY = '3k2xjqkj78jg38wwo8jeq6j6yylnoqcut7bptwbqdajbr261015825gt4wf7pg30';
 const EXTERNAL_API_URL = 'https://kd1s.com/api/v2';
 const EXTERNAL_API_KEY = 'ce5d33dc71b144c60cab2f8f977bbc21';
 const SERVICE_ID_TO_CHECK = 17337;
